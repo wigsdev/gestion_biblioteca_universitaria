@@ -86,7 +86,7 @@ g++ -std=c++11 -Wall main.cpp libros.cpp busquedas.cpp ordenamientos.cpp prestam
 Para profundizar en la lógica, flujos de desarrollo y diseños de este sistema, consulta los siguientes documentos técnicos (enlaces relativos compatibles con GitHub):
 
 *   📄 **[Plan de Implementación y Tareas](./docs/plan_implementacion.md)**: Detalle técnico sobre la división de módulos y firmas de funciones asignadas a cada integrante.
-*   📄 **[Guías Individuales de Integrantes](../guias_proy_grupo1/guia_integrante1.md)**: Guías paso a paso para [Javier (Integrante 1)](../guias_proy_grupo1/guia_integrante1.md), [Víctor (Integrante 2)](../guias_proy_grupo1/guia_integrante2.md) y [Wilmer (Integrante 3)](../guias_proy_grupo1/guia_integrante3.md).
+*   📄 **[Reglas de Implementación y Commits](./docs/reglas_implementacion_commits.md)**: Estándares de calidad en C++ y guía rápida de comandos Git y Conventional Commits.
 *   📄 **[Guía de Colaboración de Git](./docs/guia_git_colaboracion.md)**: Guía paso a paso para la clonación, creación de ramas y envío de Pull Requests.
 *   📄 **[Especificación de Arquitectura](./docs/arquitectura_proyecto.md)**: Detalle del acoplamiento modular, dependencias entre cabeceras `.h` y el flujo de la unidad de traducción.
 *   📄 **[Explicación de Algoritmos](./docs/explicacion_algoritmos.md)**: Análisis detallado de los ordenamientos, búsquedas y lógica recursiva.
