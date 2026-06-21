@@ -1,6 +1,7 @@
 #include "historial.h"
 #include "estructuras.h"
 #include "libros.h"
+#include "recursividad.h"
 #include <iostream>
 
 using namespace std;
@@ -76,7 +77,48 @@ void mostrarHistorial(NodoOperacion* cima) {
 // Algoritmo de deshacer (Undo)
 void deshacerUltimaOperacion(NodoOperacion* &cima, NodoLibro* &cabezaLibro, NodoLibro* &colaLibro) {
     // TODO: Wilmer (Integrante 3) debe implementar la lógica de Deshacer (Undo).
-    // 1. Obtener cima.
-    // 2. Dependiendo de op.tipo, revertir la acción (restaurar/eliminar/modificar/cambiar stock).
-    // 3. Ejecutar popOperacion.
+    // 1. validar si la pila está vacía
+    if (cima == nullptr) {
+        cout << "No hay operación para deshacer." << endl;
+        return;    
+    }
+
+    // 2. obtener la última operación
+    Operacion ultima = topOperacion(cima);
+
+    // 3. revertir la acción según su tipo
+    switch (ultima.tipo) {
+        case REGISTRAR_LIBRO:
+            eliminarLibro(cabezaLibro, colaLibro, ultima.libroOriginal.codigo);
+            break;
+        case ELIMINAR_LIBRO:
+            registrarLibro(cabezaLibro, colaLibro, ultima.libroOriginal);
+            break;
+        case MODIFICAR_LIBRO:
+            modificarLibro(cabezaLibro, ultima.libroOriginal.codigo, ultima.libroOriginal);
+            break;
+        case REALIZAR_PRESTAMO: {
+            NodoLibro* lib = buscarLibroRecursivo(cabezaLibro, ultima.prestamoOriginal.codigoLibro);
+            if (lib != nullptr) {
+                lib->dato.cantidadDisponible
+                 = lib->dato.cantidadDisponible + 1;            
+            }
+            break;
+        }
+        case DEVOLVER_PRESTAMO: {
+            // buscamos el libro que fue devuelto usando su código de barra/libro
+            NodoLibro* lib = buscarLibroRecursivo(cabezaLibro, ultima.prestamoOriginal.codigoLibro);
+            if (lib != nullptr && lib->dato.cantidadDisponible > 0) {
+                // restamos 1 al stock disponible para revertir devolucion
+                lib->dato.cantidadDisponible = lib->dato.cantidadDisponible - 1;            
+            }
+            break;
+        }
+    }
+
+    // 4. desapilar la operación procesada
+    popOperacion(cima);
+
+    // 5. mostrar confirmación
+    cout << "Deshecho: " << ultima.descripcion << endl;    
 }
