@@ -28,7 +28,30 @@ void encolarSolicitud(NodoPrestamo* &frente, NodoPrestamo* &fin, Prestamo p) {
 Prestamo desencolarSolicitud(NodoPrestamo* &frente, NodoPrestamo* &fin) {
     // TODO: Wilmer (Integrante 3) debe implementar desencolar (pop_front) y liberar el nodo.
     Prestamo vacio = {0, "", 0, ""};
-    return vacio;
+    // 1. validar si la cola está vacía
+    if (frente == nullptr) {
+        return vacio;    
+    }
+    
+    // 2. respaldar el dato del préstamo
+    Prestamo prestamoAtendido = frente->dato;
+
+    // 3. guarda la direccion del nodo del frente
+    NodoPrestamo* temp = frente;
+
+    // 4. desplazar el frente al siguiente elemento 
+    frente = frente->siguiente;
+
+    // 5. controlar si la cola quedó completamente vacía
+    if (frente == nullptr) {
+        fin = nullptr;    
+    }
+    
+    // 6. liberar la memoria física del nodo viejo (RAM)
+    delete temp;
+
+    // 7. retornar el prestamo respaldado
+    return prestamoAtendido;
 }
 
 void mostrarCola(NodoPrestamo* frente) {
