@@ -24,7 +24,19 @@ void pushOperacion(NodoOperacion* &cima, Operacion op) {
 
 void popOperacion(NodoOperacion* &cima) {
     // TODO: Wilmer (Integrante 3) debe implementar pop en la pila.
-    
+    // 1. validar si la pila está vacía
+    if (cima == nullptr) {
+        return;    
+    }
+
+    // 2. guardar la dirección del nodo del tope
+    NodoOperacion* temp = cima;
+
+    // 3. desplazar la cima al siguiente nodo 
+    cima = cima->siguiente;
+
+    // 4. liberar la memoria RAM del nodo desapilado
+    delete temp;
 }
 
 Operacion topOperacion(NodoOperacion* cima) {
