@@ -53,6 +53,24 @@ Operacion topOperacion(NodoOperacion* cima) {
 
 void mostrarHistorial(NodoOperacion* cima) {
     // TODO: Wilmer (Integrante 3) debe implementar mostrar la pila LIFO.
+    // 1. validar si la pila está vacía
+    if (cima == nullptr) {
+        cout << "El historial de operación está vacío." << endl;    
+    }
+
+    // 2. crear puntero auxiliar
+    NodoOperacion* actual = cima;
+
+    cout << "=== BITÁCORA / HISTORIAL DE OPERACIONES ===" << endl;
+
+    // 3. recorrer los nodos de la pila
+    while (actual != nullptr) {
+        cout << "Descripción: " << actual->dato.descripcion << endl;
+        cout << "------------------------------------------" << endl;
+        
+        // Avanzar al siguiente nodo
+        actual = actual->siguiente;
+    } 
 }
 
 // Algoritmo de deshacer (Undo)
