@@ -1,4 +1,5 @@
 #include "ordenamientos.h"
+#include "estructuras.h"
 #include <iostream>
 
 using namespace std;
@@ -28,4 +29,33 @@ void ordenarPorCodigoQuickSort(NodoLibro* cabeza, NodoLibro* cola) {
 // Wilmer (Integrante 3)
 void ordenarPorAnioInsercion(NodoLibro* cabeza) {
     // TODO: Wilmer (Integrante 3) debe implementar ordenamiento Inserción (por Año, ascendente).
+    // 1. validar si la lista tiene menos de 2 elementos
+    if (cabeza == nullptr || cabeza->siguiente == nullptr) {
+        return;    
+    }
+
+    // 2. iniciar recorrido en el segundo elemento
+    NodoLibro* actual = cabeza->siguiente;
+
+    // 3. bucle de ordenamiento
+    while (actual != nullptr) {
+        Libro clave = actual->dato;
+        NodoLibro* previo = actual->anterior;
+        
+        // comparar y desplazar datos hacia la derecha
+        while (previo != nullptr && previo->dato.anio > clave.anio) {
+            previo->siguiente->dato = previo->dato;
+            previo = previo->anterior;     
+        }
+
+        // insertar los datos en el lugar correcto
+        if (previo == nullptr) {
+            cabeza->dato = clave;        
+        } else {
+            previo->siguiente->dato = clave;
+        }
+
+        // avanzar al siguiente nodo
+        actual = actual->siguiente;        
+    }
 }
