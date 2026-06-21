@@ -1,5 +1,7 @@
 #include "historial.h"
+#include "estructuras.h"
 #include "libros.h"
+#include "recursividad.h"
 #include <iostream>
 
 using namespace std;
@@ -8,26 +10,115 @@ using namespace std;
 
 void pushOperacion(NodoOperacion* &cima, Operacion op) {
     // TODO: Wilmer (Integrante 3) debe implementar push en la pila.
+    // 1. crear el nuevo nodo de memoria
+    NodoOperacion* nuevoNodo = new NodoOperacion;
+
+    // 2. inicializar el campo dato con la operacion
+    nuevoNodo->dato = op;
+
+    // 3. conectar el nuevo nodo con lo que ya estaba en la cima
+    nuevoNodo->siguiente = cima;
+
+    // 4. mover la cima al nuevo nodo
+    cima = nuevoNodo;
 }
 
 void popOperacion(NodoOperacion* &cima) {
     // TODO: Wilmer (Integrante 3) debe implementar pop en la pila.
+    // 1. validar si la pila está vacía
+    if (cima == nullptr) {
+        return;    
+    }
+
+    // 2. guardar la dirección del nodo del tope
+    NodoOperacion* temp = cima;
+
+    // 3. desplazar la cima al siguiente nodo 
+    cima = cima->siguiente;
+
+    // 4. liberar la memoria RAM del nodo desapilado
+    delete temp;
 }
 
 Operacion topOperacion(NodoOperacion* cima) {
     // TODO: Wilmer (Integrante 3) debe implementar top en la pila.
     Operacion vacia = {REGISTRAR_LIBRO, {0, "", "", 0, 0}, {0, "", 0, ""}, "Vacía"};
-    return vacia;
+    // 1. validar si la pila está vacia
+    if (cima == nullptr) {
+        return vacia;    
+    }
+    
+    // 2. devolver el dato de la cima
+    return cima->dato;
 }
 
 void mostrarHistorial(NodoOperacion* cima) {
     // TODO: Wilmer (Integrante 3) debe implementar mostrar la pila LIFO.
+    // 1. validar si la pila está vacía
+    if (cima == nullptr) {
+        cout << "El historial de operación está vacío." << endl;    
+    }
+
+    // 2. crear puntero auxiliar
+    NodoOperacion* actual = cima;
+
+    cout << "=== BITÁCORA / HISTORIAL DE OPERACIONES ===" << endl;
+
+    // 3. recorrer los nodos de la pila
+    while (actual != nullptr) {
+        cout << "Descripción: " << actual->dato.descripcion << endl;
+        cout << "------------------------------------------" << endl;
+        
+        // Avanzar al siguiente nodo
+        actual = actual->siguiente;
+    } 
 }
 
 // Algoritmo de deshacer (Undo)
 void deshacerUltimaOperacion(NodoOperacion* &cima, NodoLibro* &cabezaLibro, NodoLibro* &colaLibro) {
     // TODO: Wilmer (Integrante 3) debe implementar la lógica de Deshacer (Undo).
-    // 1. Obtener cima.
-    // 2. Dependiendo de op.tipo, revertir la acción (restaurar/eliminar/modificar/cambiar stock).
-    // 3. Ejecutar popOperacion.
+    // 1. validar si la pila está vacía
+    if (cima == nullptr) {
+        cout << "No hay operación para deshacer." << endl;
+        return;    
+    }
+
+    // 2. obtener la última operación
+    Operacion ultima = topOperacion(cima);
+
+    // 3. revertir la acción según su tipo
+    switch (ultima.tipo) {
+        case REGISTRAR_LIBRO:
+            eliminarLibro(cabezaLibro, colaLibro, ultima.libroOriginal.codigo);
+            break;
+        case ELIMINAR_LIBRO:
+            registrarLibro(cabezaLibro, colaLibro, ultima.libroOriginal);
+            break;
+        case MODIFICAR_LIBRO:
+            modificarLibro(cabezaLibro, ultima.libroOriginal.codigo, ultima.libroOriginal);
+            break;
+        case REALIZAR_PRESTAMO: {
+            NodoLibro* lib = buscarLibroRecursivo(cabezaLibro, ultima.prestamoOriginal.codigoLibro);
+            if (lib != nullptr) {
+                lib->dato.cantidadDisponible
+                 = lib->dato.cantidadDisponible + 1;            
+            }
+            break;
+        }
+        case DEVOLVER_PRESTAMO: {
+            // buscamos el libro que fue devuelto usando su código de barra/libro
+            NodoLibro* lib = buscarLibroRecursivo(cabezaLibro, ultima.prestamoOriginal.codigoLibro);
+            if (lib != nullptr && lib->dato.cantidadDisponible > 0) {
+                // restamos 1 al stock disponible para revertir devolucion
+                lib->dato.cantidadDisponible = lib->dato.cantidadDisponible - 1;            
+            }
+            break;
+        }
+    }
+
+    // 4. desapilar la operación procesada
+    popOperacion(cima);
+
+    // 5. mostrar confirmación
+    cout << "Deshecho: " << ultima.descripcion << endl;    
 }
