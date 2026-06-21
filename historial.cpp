@@ -42,7 +42,13 @@ void popOperacion(NodoOperacion* &cima) {
 Operacion topOperacion(NodoOperacion* cima) {
     // TODO: Wilmer (Integrante 3) debe implementar top en la pila.
     Operacion vacia = {REGISTRAR_LIBRO, {0, "", "", 0, 0}, {0, "", 0, ""}, "Vacía"};
-    return vacia;
+    // 1. validar si la pila está vacia
+    if (cima == nullptr) {
+        return vacia;    
+    }
+    
+    // 2. devolver el dato de la cima
+    return cima->dato;
 }
 
 void mostrarHistorial(NodoOperacion* cima) {
