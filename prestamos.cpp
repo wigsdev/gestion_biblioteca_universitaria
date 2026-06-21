@@ -56,4 +56,27 @@ Prestamo desencolarSolicitud(NodoPrestamo* &frente, NodoPrestamo* &fin) {
 
 void mostrarCola(NodoPrestamo* frente) {
     // TODO: Wilmer (Integrante 3) debe implementar la visualización de la cola.
+    // 1. validar si la cola está vacía
+    if (frente == nullptr) {
+        cout << "La de préstamos está vacía." << endl;
+        return;    
+    }
+
+    // 2. crear puntero auxiliar
+    NodoPrestamo* actual = frente;
+
+    cout << " === SOLICITUDES DE PRÉSTAMO PENDIENTES ===" << endl;
+
+    // 3. Recorrer los nodos
+    while (actual != nullptr) {
+        // 4. mostrar datos
+        cout << "Código préstamo: " << actual->dato.codigoPrestamo << endl;
+        cout << "Alumno: " << actual->dato.alumno << endl;
+        cout << "Código Libro: " << actual->dato.codigoLibro << endl;
+        cout << "Fecha: " << actual->dato.fecha << endl;
+        cout << "--------------------------" << endl;
+
+        // 5. avanzar el puntero
+        actual = actual->siguiente;        
+    }
 }
