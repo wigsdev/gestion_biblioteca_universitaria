@@ -1,4 +1,5 @@
 #include "historial.h"
+#include "estructuras.h"
 #include "libros.h"
 #include <iostream>
 
@@ -8,10 +9,22 @@ using namespace std;
 
 void pushOperacion(NodoOperacion* &cima, Operacion op) {
     // TODO: Wilmer (Integrante 3) debe implementar push en la pila.
+    // 1. crear el nuevo nodo de memoria
+    NodoOperacion* nuevoNodo = new NodoOperacion;
+
+    // 2. inicializar el campo dato con la operacion
+    nuevoNodo->dato = op;
+
+    // 3. conectar el nuevo nodo con lo que ya estaba en la cima
+    nuevoNodo->siguiente = cima;
+
+    // 4. mover la cima al nuevo nodo
+    cima = nuevoNodo;
 }
 
 void popOperacion(NodoOperacion* &cima) {
     // TODO: Wilmer (Integrante 3) debe implementar pop en la pila.
+    
 }
 
 Operacion topOperacion(NodoOperacion* cima) {
